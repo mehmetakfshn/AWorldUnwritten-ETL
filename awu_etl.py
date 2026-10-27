@@ -90,7 +90,7 @@ def main():
                             cur.executemany(query, rows)
                         print(f'Loaded {t}: {source_counts[t]} rows')
                     # Align owned identity/serial sequences to loaded values.
-                    cur.execute('''SELECT t.relname, a.attname, pg_get_serial_sequence(format('%I.%I', n.nspname, t.relname), a.attname)
+                    cur.execute('''SELECT t.relname, a.attname, pg_get_serial_sequence(format('%%I.%%I', n.nspname, t.relname), a.attname)
                                    FROM pg_class t JOIN pg_namespace n ON n.oid=t.relnamespace
                                    JOIN pg_attribute a ON a.attrelid=t.oid AND a.attnum>0 AND NOT a.attisdropped
                                    WHERE n.nspname=%s AND t.relkind='r' ''', (SCHEMA,))
